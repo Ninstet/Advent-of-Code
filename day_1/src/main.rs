@@ -1,15 +1,6 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 
-fn bonus(mut calories: Vec<i32>) -> i32 {
-    calories.sort();
-
-    let last_three: Vec<i32> = calories.iter().skip(calories.len() - 3).cloned().collect();
-    let sum: i32 = last_three.iter().sum();
-
-    sum
-}
-
 fn main() {
     let file = File::open("input.txt").unwrap();
     let reader = BufReader::new(file);
@@ -45,4 +36,13 @@ fn main() {
 
     // Bonus
     println!("{}", bonus(calories));
+}
+
+fn bonus(mut calories: Vec<i32>) -> i32 {
+    calories.sort();
+
+    let last_three: Vec<i32> = calories.iter().skip(calories.len() - 3).cloned().collect();
+    let sum: i32 = last_three.iter().sum();
+
+    sum
 }
