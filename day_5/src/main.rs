@@ -38,6 +38,7 @@ fn main() {
 
     // Initialize an empty Vec of Vecs to store the arrangement of crates
     let mut arrangement: Vec<Vec<char>> = Vec::new();
+    let mut bonus_arrangement: Vec<Vec<char>> = Vec::new();
 
     // Iterate over the lines in the file
     for line in reader.lines() {
@@ -59,6 +60,7 @@ fn main() {
                     // Initialize an empty Vec for the stack if it doesn't exist yet
                     if arrangement.len() < no_stacks {
                         arrangement.push(Vec::new());
+                        bonus_arrangement.push(Vec::new());
                     }
 
                     // Get the crate name from the line
@@ -67,12 +69,16 @@ fn main() {
                     // Add the crate to the stack if it's not a space or a number
                     if crate_name != ' ' && !crate_name.is_numeric() {
                         arrangement[i - 1].push(crate_name);
+                        bonus_arrangement[i - 1].push(crate_name);
                     }
                 }
 
                 // If the line is empty, reverse the order of the crates in each stack and switch to the "Instruction" state
                 if line == "" {
                     for vec in arrangement.iter_mut() {
+                        vec.reverse();
+                    }
+                    for vec in bonus_arrangement.iter_mut() {
                         vec.reverse();
                     }
                     state = State::Instruction;
@@ -83,27 +89,37 @@ fn main() {
                 // Split the line into words and convert them to a Vec of &str
                 let words: Vec<&str> = line.split_whitespace().collect();
 
-                // Parse the numbers from the words and collect them into a Vec of i32
-                let numbers: Vec<i32> = words.iter()
-                    .filter_map(|word| word.parse().ok())
-                    .collect();
+                let mut crates: Vec<char> = Vec::new();
+
+                // Get the stack indices for the move
+                let from_stack: usize = words[3].parse::<usize>().unwrap() - 1;
+                let to_stack: usize = words[5].parse::<usize>().unwrap() - 1;
 
                 // Perform the specified number of moves
                 for _ in 0..numbers[0] as usize {
-                    // Get the stack indices for the move
-                    let from = numbers[1] as usize - 1;
-                    let to = numbers[2] as usize - 1;
+                    let element: char = arrangement[from_stack].pop().unwrap();
+                    let bonus_element: char = bonus_arrangement[from_stack].pop().unwrap();
 
-                    let element = arrangement[from].pop().unwrap();
-                    arrangement[to].push(element);
+                    crates.push(bonus_element); // Char implements the 'Copy' trait so is copied to the Vec
+                    arrangement[to_stack].push(element);
 
-                    println!("Moved {} from {} to {}", element, from + 1, to + 1);
+                    println!("Moved {} from {} to {}", element, from_stack + 1, to_stack + 1);
+                }
+
+                // Reverse crates to insert them in the original order
+                crates.reverse();
+                for element in crates {
+                    bonus_arrangement[to_stack].push(element);
+
+                    println!("[BONUS] Moved {} from {} to {}", element, from_stack + 1, to_stack + 1);
                 }
             }
-
         }
     }
 
     let string: String = arrangement.iter().map(|v| v[v.len() - 1].to_string()).collect();
-    println!("{}", string);
+    let bonus_string: String = bonus_arrangement.iter().map(|v| v[v.len() - 1].to_string()).collect();
+
+    println!("Main: {}", string);
+    println!("Bonus: {}", bonus_string);
 }
