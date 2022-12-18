@@ -9,6 +9,7 @@ fn main() {
 
     // Initialize a counter for the number of lines that contain overlapping pairs of integers
     let mut no_contains = 0;
+    let mut no_contains_bonus = 0;
 
     // Iterate over the lines in the file
     for line in reader.lines() {
@@ -25,17 +26,18 @@ fn main() {
             .map(|s| s.parse().unwrap())
             .collect();
 
-        // Print the Vec of integers
-        println!("{:#?}", numbers);
-
         // Check if the two pairs of integers are overlapping
         if (numbers[0] <= numbers[2] && numbers[1] >= numbers[3]) || (numbers[0] >= numbers[2] && numbers[1] <= numbers[3]) {
             // If they are, increment the counter and print the line
             no_contains += 1;
-            println!("{}", line);
+        }
+
+        if numbers[1] >= numbers[2] && numbers[0] <= numbers[3] {
+            no_contains_bonus += 1;
         }
     }
 
     // Print the final count of lines with overlapping pairs
-    println!("{}", no_contains);
+    println!("Main: {}", no_contains);
+    println!("Bonus: {}", no_contains_bonus);
 }
