@@ -50,20 +50,27 @@ fn main() {
             State::Arrangement => {
                 // Calculate the number of stacks in the arrangement
                 let no_stacks = (line.len() + 1) / 4;
+
+                // Convert the line to a Vec of chars
                 let chars: Vec<char> = line.chars().collect();
 
+                // Iterate over the stacks in the arrangement
                 for i in 1..(no_stacks + 1) {
+                    // Initialize an empty Vec for the stack if it doesn't exist yet
                     if arrangement.len() < no_stacks {
                         arrangement.push(Vec::new());
                     }
 
+                    // Get the crate name from the line
                     let crate_name: char = chars[(4 * i) - 3];
 
+                    // Add the crate to the stack if it's not a space or a number
                     if crate_name != ' ' && !crate_name.is_numeric() {
                         arrangement[i - 1].push(crate_name);
                     }
                 }
 
+                // If the line is empty, reverse the order of the crates in each stack and switch to the "Instruction" state
                 if line == "" {
                     for vec in arrangement.iter_mut() {
                         vec.reverse();
@@ -71,13 +78,19 @@ fn main() {
                     state = State::Instruction;
                 }
             },
+            // If the state is "Instruction", process the line as an instruction
             State::Instruction => {
+                // Split the line into words and convert them to a Vec of &str
                 let words: Vec<&str> = line.split_whitespace().collect();
+
+                // Parse the numbers from the words and collect them into a Vec of i32
                 let numbers: Vec<i32> = words.iter()
                     .filter_map(|word| word.parse().ok())
                     .collect();
 
+                // Perform the specified number of moves
                 for _ in 0..numbers[0] as usize {
+                    // Get the stack indices for the move
                     let from = numbers[1] as usize - 1;
                     let to = numbers[2] as usize - 1;
 
@@ -90,7 +103,7 @@ fn main() {
 
         }
     }
-    
+
     let string: String = arrangement.iter().map(|v| v[v.len() - 1].to_string()).collect();
     println!("{}", string);
 }
