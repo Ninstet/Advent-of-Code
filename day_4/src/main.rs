@@ -8,54 +8,53 @@
     Finally, the code prints the final count of lines with overlapping pairs.
  */
 
- use std::fs::File;
- use std::io::{BufReader, BufRead};
- 
- fn main() {
-     // Open the file "input.txt"
-     let file = File::open("input.txt").unwrap();
+use std::fs::File;
+use std::io::{BufReader, BufRead};
 
-     // Create a buffered reader for the file
-     let reader = BufReader::new(file);
- 
-     // Initialize a counter for the number of lines that contain overlapping pairs of integers
-     let mut no_contains = 0;
+fn main() {
+    // Open the file "input.txt"
+    let file = File::open("input.txt").unwrap();
 
-     // Initialize a counter for the number of lines that contain intersecting pairs of integers
-     let mut no_contains_bonus = 0;
- 
-     // Iterate over the lines in the file
-     for line in reader.lines() {
-         // Get the line as a string
-         let line = line.unwrap();
- 
-         // Split the line on the comma character to get a Vec of chunks
-         let chunks: Vec<&str> = line.split(',').collect();
- 
-         // Flatten the Vec of chunks into a single iterator and split each chunk on the dash character
-         let numbers: Vec<i32> = chunks.iter()
-             .flat_map(|chunk| chunk.split('-'))
-             // Parse the substrings as integers
-             .map(|s| s.parse().unwrap())
-             .collect();
- 
-         // Check if the two pairs of integers are overlapping
-         if (numbers[0] <= numbers[2] && numbers[1] >= numbers[3]) || (numbers[0] >= numbers[2] && numbers[1] <= numbers[3]) {
-             // If they are, increment the counter
-             no_contains += 1;
-         }
- 
-         // Check if the two pairs of integers intersect (have at least one integer in common)
-         if numbers[1] >= numbers[2] && numbers[0] <= numbers[3] {
-             // If they do, increment the counter
-             no_contains_bonus += 1;
-         }
-     }
- 
-     // Print the final count of lines with overlapping pairs
-     println!("Main: {}", no_contains);
+    // Create a buffered reader for the file
+    let reader = BufReader::new(file);
 
-     // Print the final count of lines with intersecting pairs
-     println!("Bonus: {}", no_contains_bonus);
- }
- 
+    // Initialize a counter for the number of lines that contain overlapping pairs of integers
+    let mut no_contains = 0;
+
+    // Initialize a counter for the number of lines that contain intersecting pairs of integers
+    let mut no_contains_bonus = 0;
+
+    // Iterate over the lines in the file
+    for line in reader.lines() {
+        // Get the line as a string
+        let line = line.unwrap();
+
+        // Split the line on the comma character to get a Vec of chunks
+        let chunks: Vec<&str> = line.split(',').collect();
+
+        // Flatten the Vec of chunks into a single iterator and split each chunk on the dash character
+        let numbers: Vec<i32> = chunks.iter()
+            .flat_map(|chunk| chunk.split('-'))
+            // Parse the substrings as integers
+            .map(|s| s.parse().unwrap())
+            .collect();
+
+        // Check if the two pairs of integers are overlapping
+        if (numbers[0] <= numbers[2] && numbers[1] >= numbers[3]) || (numbers[0] >= numbers[2] && numbers[1] <= numbers[3]) {
+            // If they are, increment the counter
+            no_contains += 1;
+        }
+
+        // Check if the two pairs of integers intersect (have at least one integer in common)
+        if numbers[1] >= numbers[2] && numbers[0] <= numbers[3] {
+            // If they do, increment the counter
+            no_contains_bonus += 1;
+        }
+    }
+
+    // Print the final count of lines with overlapping pairs
+    println!("Main: {}", no_contains);
+
+    // Print the final count of lines with intersecting pairs
+    println!("Bonus: {}", no_contains_bonus);
+}
