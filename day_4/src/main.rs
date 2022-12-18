@@ -4,7 +4,7 @@
     The code then checks if the two pairs of integers are overlapping by checking if either of the following conditions are true:
      - The first pair of integers is contained within the second pair
      - The second pair of integers is contained within the first pair
-    If either of these conditions is true, the code increments the no_contains counter and prints the line. It also has a separate counter, no_contains_bonus, that is incremented if the two pairs of integers intersect (i.e. they have at least one integer in common).
+    If either of these conditions is true, the code increments the no_contains counter. It also has a separate counter, no_contains_bonus, that is incremented if the two pairs of integers intersect (i.e. they have at least one integer in common).
     Finally, the code prints the final count of lines with overlapping pairs.
  */
 
