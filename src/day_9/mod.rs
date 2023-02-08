@@ -141,6 +141,19 @@ fn part_1(file_path: &str) -> usize {
 }
 
 fn part_2(file_path: &str) -> usize {
+    // let input = std::fs::read_to_string("tests/day_9.txt").unwrap();
+
+    // let mut coords: Vec<(i32, i32)> = vec![(0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)];
+
+    // let mut t_log: Vec<(i32, i32)> = Vec::new();
+
+    // for line in input.lines() {
+    //     let parts: Vec<&str> = line.split_whitespace().collect();
+
+    //     print_status(coords, 30);
+
+    // }
+
     0
 }
 
