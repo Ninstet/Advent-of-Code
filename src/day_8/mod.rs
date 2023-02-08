@@ -1,13 +1,13 @@
 pub fn main() {
-    let (part_1, part_2) = both_parts();
+    let (part_1, part_2) = both_parts("src/day_8/data.txt");
 
     println!("----- DAY 8 -----");
     println!("Part 1: {}", part_1);
     println!("Part 2: {}", part_2);
 }
 
-fn both_parts() -> (usize, usize) {
-    let input = std::fs::read_to_string("src/day_8/data.txt").unwrap();
+fn both_parts(file_path: &str) -> (usize, usize) {
+    let input = std::fs::read_to_string(file_path).unwrap();
 
     let mut rows: Vec<Vec<u32>> = Vec::new();
     let mut columns: Vec<Vec<u32>> = Vec::new();
@@ -58,4 +58,19 @@ fn both_parts() -> (usize, usize) {
     }
 
     (no_visible, most_visible)
+}
+
+#[cfg(test)]
+mod test {
+    use crate::day_8::*;
+
+    #[test]
+    fn test_part_1() {
+        assert_eq!(both_parts("src/day_8/test.txt").0, 21);
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(both_parts("src/day_8/test.txt").1, 8);
+    }
 }

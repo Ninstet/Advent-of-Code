@@ -2,8 +2,8 @@ use std::collections::HashSet;
 
 pub fn main() {
     println!("----- DAY 9 -----");
-    println!("Part 1: {}", part_1());
-    // println!("Part 2: {}", part_2);
+    println!("Part 1: {}", part_1("src/day_9/data.txt"));
+    println!("Part 2: {}", part_2("src/day_9/data.txt"));
 }
 
 fn print_status(h_coords: (i32, i32), t_coords: (i32, i32), grid_size: usize) {
@@ -39,8 +39,8 @@ fn corner_rule(h_coords: &(i32, i32), t_coords: &mut (i32, i32)) {
     }
 }
 
-fn part_1() -> usize {
-    let input = std::fs::read_to_string("src/day_9/data.txt").unwrap();
+fn part_1(file_path: &str) -> usize {
+    let input = std::fs::read_to_string(file_path).unwrap();
 
     let mut h_coords: (i32, i32) = (0, 0);
     let mut t_coords: (i32, i32) = (0, 0);
@@ -138,4 +138,23 @@ fn part_1() -> usize {
     println!("{}", unique_t_log.len());
 
     unique_t_log.len()
+}
+
+fn part_2(file_path: &str) -> usize {
+    0
+}
+
+#[cfg(test)]
+mod test {
+    use crate::day_9::*;
+
+    #[test]
+    fn test_part_1() {
+        assert_eq!(part_1("src/day_9/test.txt"), 13);
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(part_2("src/day_9/test.txt"), 0);
+    }
 }

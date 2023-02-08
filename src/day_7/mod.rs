@@ -3,12 +3,12 @@ use std::path::PathBuf;
 
 pub fn main() {
     println!("----- DAY 7 -----");
-    println!("Part 1: {}", part_1());
-    println!("Part 2: {}", part_2());
+    println!("Part 1: {}", part_1("src/day_7/data.txt"));
+    println!("Part 2: {}", part_2("src/day_7/data.txt"));
 }
 
-fn part_1() -> u32 {
-    let input = std::fs::read_to_string("src/day_7/data.txt").unwrap();
+fn part_1(file_path: &str) -> u32 {
+    let input = std::fs::read_to_string(file_path).unwrap();
     let filesystem: HashMap<PathBuf, u32> = get_filesystem(input);
 
     filesystem
@@ -17,8 +17,8 @@ fn part_1() -> u32 {
         .sum()
 }
 
-fn part_2() -> u32 {
-    let input: String = std::fs::read_to_string("src/day_7/data.txt").unwrap();
+fn part_2(file_path: &str) -> u32 {
+    let input: String = std::fs::read_to_string(file_path).unwrap();
     let filesystem: HashMap<PathBuf, u32> = get_filesystem(input);
 
     let remaining_size: u32 = 70_000_000 - filesystem.get(&PathBuf::from("/")).unwrap();
@@ -60,4 +60,19 @@ fn get_filesystem(input: String) -> HashMap<PathBuf, u32> {
     }
 
     filesystem
+}
+
+#[cfg(test)]
+mod test {
+    use crate::day_7::*;
+
+    #[test]
+    fn test_part_1() {
+        assert_eq!(part_1("src/day_7/test.txt"), 95437);
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(part_2("src/day_7/test.txt"), 24933642);
+    }
 }
