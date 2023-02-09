@@ -15,7 +15,6 @@ fn part_1(file_path: &str) -> i32 {
     let mut signal_strength: Vec<i32> = Vec::new();
 
     for line in input.lines() {
-
         if line == "noop" {
             cycle += 1;
             check_signal_strength(&mut signal_strength, line, X, cycle);
@@ -49,7 +48,6 @@ fn part_2(file_path: &str) -> i32 {
     let mut display: Vec<bool> = vec![true];
 
     for line in input.lines() {
-
         if line == "noop" {
             pixel_position += 1;
             display.push(is_pixel_lit(&mut pixel_position, sprite_position));
@@ -71,7 +69,9 @@ fn part_2(file_path: &str) -> i32 {
     }
 
     for i in 0..display.len() {
-        if i % 40 == 0 { println!() }
+        if i % 40 == 0 {
+            println!()
+        }
         print!("{}", if display[i] { '#' } else { '.' });
         io::stdout().flush().unwrap();
     }
@@ -88,8 +88,12 @@ fn check_signal_strength(signal_strength: &mut Vec<i32>, line: &str, X: i32, cyc
 }
 
 fn is_pixel_lit(pixel_position: &mut i32, sprite_position: i32) -> bool {
-    if *pixel_position >= 40 { *pixel_position = 0 }
-    *pixel_position == sprite_position || *pixel_position == sprite_position - 1 || *pixel_position == sprite_position + 1
+    if *pixel_position >= 40 {
+        *pixel_position = 0
+    }
+    *pixel_position == sprite_position
+        || *pixel_position == sprite_position - 1
+        || *pixel_position == sprite_position + 1
 }
 
 #[cfg(test)]

@@ -24,16 +24,24 @@ fn print_status(h_coords: (i32, i32), t_coords: (i32, i32), grid_size: usize) {
 }
 
 fn corner_rule(h_coords: &(i32, i32), t_coords: &mut (i32, i32)) {
-    if ((h_coords.0 - t_coords.0) > 1 && (h_coords.1 - t_coords.1) > 0) || ((h_coords.0 - t_coords.0) > 0 && (h_coords.1 - t_coords.1) > 1) {
+    if ((h_coords.0 - t_coords.0) > 1 && (h_coords.1 - t_coords.1) > 0)
+        || ((h_coords.0 - t_coords.0) > 0 && (h_coords.1 - t_coords.1) > 1)
+    {
         t_coords.0 += 1;
         t_coords.1 += 1;
-    } else if ((h_coords.0 - t_coords.0) > 1 && (h_coords.1 - t_coords.1) < 0) || ((h_coords.0 - t_coords.0) > 0 && (h_coords.1 - t_coords.1) < -1) {
+    } else if ((h_coords.0 - t_coords.0) > 1 && (h_coords.1 - t_coords.1) < 0)
+        || ((h_coords.0 - t_coords.0) > 0 && (h_coords.1 - t_coords.1) < -1)
+    {
         t_coords.0 += 1;
         t_coords.1 -= 1;
-    } else if ((h_coords.0 - t_coords.0) < -1 && (h_coords.1 - t_coords.1) > 0) || ((h_coords.0 - t_coords.0) < 0 && (h_coords.1 - t_coords.1) > 1) {
+    } else if ((h_coords.0 - t_coords.0) < -1 && (h_coords.1 - t_coords.1) > 0)
+        || ((h_coords.0 - t_coords.0) < 0 && (h_coords.1 - t_coords.1) > 1)
+    {
         t_coords.0 -= 1;
         t_coords.1 += 1;
-    } else if ((h_coords.0 - t_coords.0) < -1 && (h_coords.1 - t_coords.1) < 0) || ((h_coords.0 - t_coords.0) < 0 && (h_coords.1 - t_coords.1) < -1) {
+    } else if ((h_coords.0 - t_coords.0) < -1 && (h_coords.1 - t_coords.1) < 0)
+        || ((h_coords.0 - t_coords.0) < 0 && (h_coords.1 - t_coords.1) < -1)
+    {
         t_coords.0 -= 1;
         t_coords.1 -= 1;
     }
@@ -115,7 +123,7 @@ fn part_1(file_path: &str) -> usize {
 
     // Convert the HashSet back into a Vec
     let unique_t_log: Vec<_> = set.into_iter().collect();
-    
+
     for i in (0..30).rev() {
         let mut line: String = "".to_string();
         for j in 0..30 {

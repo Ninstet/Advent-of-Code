@@ -38,18 +38,32 @@ fn both_parts(file_path: &str) -> (usize, usize) {
             let columns_top = &columns[j][0..i];
             let columns_bottom = &columns[j][i + 1..columns.len()];
 
-            if rows_left.iter().all(|x| *x < value) ||
-                rows_right.iter().all(|x| *x < value) ||
-                columns_top.iter().all(|x| *x < value) ||
-                columns_bottom.iter().all(|x| *x < value) {
-                
+            if rows_left.iter().all(|x| *x < value)
+                || rows_right.iter().all(|x| *x < value)
+                || columns_top.iter().all(|x| *x < value)
+                || columns_bottom.iter().all(|x| *x < value)
+            {
                 no_visible += 1;
             }
 
-            let visibility = (1 + rows_left.iter().rev().position(|x| *x >= value).unwrap_or(rows_left.len() - 1)) *
-                (1 + rows_right.iter().position(|x| *x >= value).unwrap_or(rows_right.len() - 1)) *
-                (1 + columns_top.iter().rev().position(|x| *x >= value).unwrap_or(columns_top.len() - 1)) *
-                (1 + columns_bottom.iter().position(|x| *x >= value).unwrap_or(columns_bottom.len() - 1));
+            let visibility = (1 + rows_left
+                .iter()
+                .rev()
+                .position(|x| *x >= value)
+                .unwrap_or(rows_left.len() - 1))
+                * (1 + rows_right
+                    .iter()
+                    .position(|x| *x >= value)
+                    .unwrap_or(rows_right.len() - 1))
+                * (1 + columns_top
+                    .iter()
+                    .rev()
+                    .position(|x| *x >= value)
+                    .unwrap_or(columns_top.len() - 1))
+                * (1 + columns_bottom
+                    .iter()
+                    .position(|x| *x >= value)
+                    .unwrap_or(columns_bottom.len() - 1));
 
             if visibility > most_visible {
                 most_visible = visibility;
