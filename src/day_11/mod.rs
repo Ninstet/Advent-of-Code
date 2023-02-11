@@ -1,7 +1,7 @@
 pub fn main() {
     println!("----- DAY 11 -----");
     println!("Part 1: {}", part_1("src/day_11/data.txt"));
-    println!("Part 2: {}", part_2());
+    println!("Part 2: {}", part_2("src/day_11/data.txt"));
 }
 
 #[derive(Debug, Clone)]
@@ -16,17 +16,17 @@ enum Operator {
 #[derive(Debug, Clone)]
 struct Operation {
     operator: Operator,
-    rhs: u32,
+    rhs: u128,
 }
 
 #[derive(Debug, Clone)]
 struct Monkey {
-    id: u32,
-    items: Vec<u32>,
+    id: u128,
+    items: Vec<u128>,
     operation: Option<Operation>,
-    test: u32,
-    true_monkey: u32,
-    false_monkey: u32,
+    test: u128,
+    true_monkey: u128,
+    false_monkey: u128,
 }
 
 impl Monkey {
@@ -51,12 +51,12 @@ fn parse_monkeys(input: String) -> Vec<Monkey> {
 
         match parts[..] {
             ["Monkey", id] => {
-                current_monkey.id = id.trim_end_matches(':').parse::<u32>().unwrap();
+                current_monkey.id = id.trim_end_matches(':').parse::<u128>().unwrap();
             }
             ["Starting", "items:", ..] => {
                 let mut items = vec![];
                 for item in &parts[2..] {
-                    if let Ok(number) = item.trim_end_matches(',').parse::<u32>() {
+                    if let Ok(number) = item.trim_end_matches(',').parse::<u128>() {
                         items.push(number);
                     }
                 }
@@ -73,17 +73,17 @@ fn parse_monkeys(input: String) -> Vec<Monkey> {
                         "/" => Operator::DIVIDE,
                         _ => Operator::NONE,
                     },
-                    rhs: rhs.parse::<u32>().unwrap_or(0),
+                    rhs: rhs.parse::<u128>().unwrap_or(0),
                 });
             }
             ["Test:", "divisible", "by", val] => {
-                current_monkey.test = val.parse::<u32>().unwrap();
+                current_monkey.test = val.parse::<u128>().unwrap();
             }
             ["If", "true:", "throw", "to", "monkey", val] => {
-                current_monkey.true_monkey = val.parse::<u32>().unwrap();
+                current_monkey.true_monkey = val.parse::<u128>().unwrap();
             }
             ["If", "false:", "throw", "to", "monkey", val] => {
-                current_monkey.false_monkey = val.parse::<u32>().unwrap();
+                current_monkey.false_monkey = val.parse::<u128>().unwrap();
             }
             [] => {
                 monkeys.push(current_monkey.clone());
@@ -96,25 +96,29 @@ fn parse_monkeys(input: String) -> Vec<Monkey> {
     monkeys
 }
 
-fn calculate_round(monkeys: &mut Vec<Monkey>, verbose: bool) -> Vec<u32> {
-    let mut inspections: Vec<u32> = Vec::new();
+fn calculate_round(monkeys: &mut Vec<Monkey>, divide_by_three: bool, verbose: bool) -> Vec<u128> {
+    let mut inspections: Vec<u128> = Vec::new();
     for _ in 0..monkeys.len() {
         inspections.push(0);
     }
 
+    // Calculate supermodulo
+    let supermodulo: u128 = monkeys.iter().fold(1, |acc, x| acc * x.test);
+
     for id in 0..monkeys.len() {
-        let monkey = monkeys[id].clone();
+        let mut monkey = monkeys[id].clone();
         let operation = monkey.operation.clone().unwrap();
 
         if verbose {
             println!("Monkey {}:", monkey.id);
         }
 
-        inspections[id] += monkeys[id].items.len() as u32;
+        inspections[id] += monkeys[id].items.len() as u128;
 
         for monkey_item in &monkey.items {
             let mut item = monkey_item.clone();
             let orig_item = item;
+            item %= supermodulo;
 
             // Monkey inspects item
             if verbose {
@@ -153,12 +157,14 @@ fn calculate_round(monkeys: &mut Vec<Monkey>, verbose: bool) -> Vec<u32> {
             }
 
             // Monkey gets bored
-            item /= 3;
-            if verbose {
-                println!(
-                    "    Monkey gets bored with item. Worry level is divided by 3 to {}.",
-                    item
-                );
+            if divide_by_three {
+                item /= 3;
+                if verbose {
+                    println!(
+                        "    Monkey gets bored with item. Worry level is divided by 3 to {}.",
+                        item
+                    );
+                }
             }
 
             // Check test
@@ -208,19 +214,19 @@ fn print_items(monkeys: &Vec<Monkey>) {
     }
 }
 
-fn part_1(file_path: &str) -> u32 {
+fn part_1(file_path: &str) -> u128 {
     let input = std::fs::read_to_string(file_path).unwrap();
 
     let mut monkeys: Vec<Monkey> = parse_monkeys(input);
 
-    let mut inspections: Vec<u32> = Vec::new();
+    let mut inspections: Vec<u128> = Vec::new();
     for _ in 0..monkeys.len() {
         inspections.push(0);
     }
 
     for round in 1..21 {
         println!("\nRound {}:", round);
-        let round_inspections = calculate_round(&mut monkeys, false);
+        let round_inspections = calculate_round(&mut monkeys, true, false);
         print_items(&monkeys);
 
         for id in 0..monkeys.len() {
@@ -234,6 +240,28 @@ fn part_1(file_path: &str) -> u32 {
     inspections[0] * inspections[1]
 }
 
-fn part_2() -> u32 {
-    0
+fn part_2(file_path: &str) -> u128 {
+    let input = std::fs::read_to_string(file_path).unwrap();
+
+    let mut monkeys: Vec<Monkey> = parse_monkeys(input);
+
+    let mut inspections: Vec<u128> = Vec::new();
+    for _ in 0..monkeys.len() {
+        inspections.push(0);
+    }
+
+    for round in 1..10001 {
+        if round % 2000 == 0 { println!("\nRound {}:", round) }
+        let round_inspections = calculate_round(&mut monkeys, false, false);
+        if round % 2000 == 0 { print_items(&monkeys) }
+
+        for id in 0..monkeys.len() {
+            inspections[id] += round_inspections[id];
+        }
+    }
+
+    println!("\nInspections: {:?}", inspections);
+
+    inspections.sort_unstable_by(|a, b| b.cmp(a));
+    inspections[0] * inspections[1]
 }
