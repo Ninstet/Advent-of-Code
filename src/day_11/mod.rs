@@ -251,9 +251,13 @@ fn part_2(file_path: &str) -> u128 {
     }
 
     for round in 1..10001 {
-        if round % 2000 == 0 { println!("\nRound {}:", round) }
+        if round % 2000 == 0 {
+            println!("\nRound {}:", round)
+        }
         let round_inspections = calculate_round(&mut monkeys, false, false);
-        if round % 2000 == 0 { print_items(&monkeys) }
+        if round % 2000 == 0 {
+            print_items(&monkeys)
+        }
 
         for id in 0..monkeys.len() {
             inspections[id] += round_inspections[id];
@@ -264,4 +268,19 @@ fn part_2(file_path: &str) -> u128 {
 
     inspections.sort_unstable_by(|a, b| b.cmp(a));
     inspections[0] * inspections[1]
+}
+
+#[cfg(test)]
+mod test {
+    use crate::day_11::*;
+
+    #[test]
+    fn test_part_1() {
+        assert_eq!(part_1("src/day_11/test.txt"), 10605);
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(part_2("src/day_11/test.txt"), 2713310158);
+    }
 }
